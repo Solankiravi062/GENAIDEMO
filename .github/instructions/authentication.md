@@ -1,3 +1,7 @@
+---
+description: Read this before implemnting or modifing UI component in the project.
+---
+
 # Authentication Conventions
 
 ## Overview
@@ -141,11 +145,37 @@ export default function UserProfile() {
 
 ## Clerk Configuration
 
-Clerk is configured via environment variables:
+Clerk is configured via:
+
+### Environment Variables
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Public key (safe to expose)
 - `CLERK_SECRET_KEY` - Secret key (server-only)
 
 These should be set in `.env.local` for local development and in deployment environment variables.
+
+### ClerkProvider Setup
+Configure the `ClerkProvider` in the root layout with redirect URLs for automatic post-authentication navigation:
+
+```typescript
+import { ClerkProvider } from "@clerk/nextjs";
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <ClerkProvider
+          afterSignInUrl="/dashboard"
+          afterSignUpUrl="/dashboard"
+        >
+          {children}
+        </ClerkProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+This ensures users are automatically redirected to `/dashboard` after successful sign-in or sign-up, eliminating the need for manual page refresh.
 
 ---
 

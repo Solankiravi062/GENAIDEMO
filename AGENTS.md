@@ -4,29 +4,12 @@
 
 **🚨 YOU MUST READ THE RELEVANT DOCUMENTATION FILES BEFORE GENERATING ANY CODE 🚨**
 
-This is not optional. Every single code generation task requires reading the appropriate instruction files from the `/docs` directory FIRST. Failure to do so will result in:
-- ❌ Code that violates project standards
-- ❌ Inconsistent patterns across the codebase
-- ❌ Type safety violations
-- ❌ Rejected pull requests and rework
-
 **When you receive any task:**
 1. **STOP** before writing code
 2. **IDENTIFY** which domain the task falls into (e.g., UI components, database, authentication, TypeScript)
-3. **READ** the corresponding documentation file from `/docs/` 
 4. **REFERENCE** the guidelines while implementing
 5. **VERIFY** your code against the checklist in that document
 
-Acceptable documentation files that MUST be consulted:
-- `docs/authentication.md` - For any auth-related code
-- `docs/ui-components.md` - For any UI/component code
-- `docs/component-guidelines.md` - For React component structure
-- `docs/typescript-conventions.md` - For type definitions
-- `docs/database-conventions.md` - For database operations
-- `docs/code-organization.md` - For file structure and placement
-- `docs/naming-conventions.md` - For naming standards
-- `docs/routing-conventions.md` - For routes and API endpoints
-- `docs/best-practices.md` - For general patterns and error handling
 
 If you're unsure which file to read, read multiple files. It's better to be overly cautious than to generate non-compliant code.
 
@@ -51,23 +34,6 @@ This is a **Link Shortener Application** built with modern web technologies:
 - Track link analytics
 - Responsive UI with shadcn/ui components
 - Type-safe database operations
-
-## Documentation Structure
-
-This project uses a modular documentation approach with separate instruction files for different aspects of development. All agent instructions are organized in the `/docs` directory.
-
-**📋 MANDATORY WORKFLOW: Before writing ANY code, you MUST read the relevant .md file from the `/docs` directory based on the type of code you're about to implement.**
-
-The following documentation files provide critical guidance for each type of work:
-- **`docs/authentication.md`** - Clerk implementation, protected routes, user flows
-- **`docs/ui-components.md`** - shadcn/ui components, Tailwind styling, component patterns
-- **`docs/component-guidelines.md`** - React component structure, hooks, "use client" directives
-- **`docs/typescript-conventions.md`** - Type definitions, interfaces, no `any` types
-- **`docs/database-conventions.md`** - Drizzle ORM patterns, schema design, migrations
-- **`docs/code-organization.md`** - Where to place files, folder structure
-- **`docs/naming-conventions.md`** - File naming, variable naming, component naming
-- **`docs/routing-conventions.md`** - Route structure, API endpoints, response formats
-- **`docs/best-practices.md`** - Error handling, security, general patterns
 
 Failure to reference these documents before coding will result in non-compliant code.
 
@@ -146,7 +112,7 @@ lib/                    # Utilities and helpers
 ├── schemas.ts          # Zod validation schemas
 └── api/                # API client utilities
 
-docs/                   # Instruction documentation (this folder)
+
 └── *.md                # Detailed conventions
 ```
 
@@ -161,14 +127,12 @@ docs/                   # Instruction documentation (this folder)
 
 ### When Writing Code
 
-⚠️ **CRITICAL: ALWAYS READ THE RELEVANT DOCUMENTATION FIRST** ⚠️
 
-**DO NOT generate code without first reading the appropriate documentation file from `/docs/`. This is mandatory.**
+
 
 Follow this workflow for every code generation task:
 1. **STOP** - Don't write code yet
 2. **IDENTIFY** - What type of code are you writing? (UI, database, auth, TypeScript, etc.)
-3. **READ** - Open and read the corresponding `/docs/` file completely
 4. **IMPLEMENT** - Follow the patterns from the documentation
 5. **VERIFY** - Check your code against the documentation checklist
 
@@ -187,7 +151,7 @@ Follow this workflow for every code generation task:
 4. **For authentication**
    - Follow [authentication.md](./authentication.md)
    - Use Clerk for all authentication
-   - Protect routes using middleware
+   - Protect routes using `proxy.ts` (NOT `middleware.ts` - that's deprecated)
    - Implement modal-based sign in/sign up
 
 5. **For database operations**
@@ -266,6 +230,13 @@ npm run start    # Start production server
 - Extends Next.js configuration
 - Type-aware linting for TypeScript
 
+### Request Handling (`proxy.ts`)
+⚠️ **🚨 CRITICAL**: This project uses **`proxy.ts`** for all request middleware. **DO NOT use `middleware.ts`** - it is deprecated in Next.js 16+ and will cause conflicts.
+- Authentication checks and route protection
+- Request interception and validation
+- **NEVER create or use `middleware.ts`** - it's deprecated and will cause initialization errors with `proxy.ts`
+- Both files cannot coexist in the same project
+
 ## Common Patterns Used
 
 ### Server Actions Pattern
@@ -315,6 +286,13 @@ npm run start    # Start production server
 ✅ Define relationships and constraints  
 ❌ Don't write raw SQL unless necessary  
 ❌ Don't skip database constraints
+
+### Routing & Middleware
+✅ Use `proxy.ts` for request middleware (Next.js 16+)  
+❌ **🚨 NEVER use `middleware.ts`** - This is deprecated in Next.js 16 and later  
+❌ Don't create custom middleware patterns  
+
+⚠️ **CRITICAL WARNING**: This project uses Next.js 16.1.6 where `middleware.ts` is deprecated and will cause conflicts. Always use `proxy.ts` instead for ALL request interception, authentication checks, and route protection needs. Both files cannot coexist in the same project - the presence of both will cause initialization errors and prevent the application from running.
 
 ## Getting Help
 

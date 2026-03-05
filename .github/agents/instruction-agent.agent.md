@@ -1,6 +1,6 @@
 ---
 name: instruction-agent
-description: "This agent generates hightly specific agent instruction files for the /docs directory"
+description: "This agent generates hightly specific agent instruction files."
 tools: ["read", "edit", "search", "web"]
 
 ---
