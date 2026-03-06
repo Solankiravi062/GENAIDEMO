@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "description": "Tool output hooks for performance tracking",
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "name": "log-tool-output",
+        "bash": "mkdir -p tmp && cat > tmp/$(date +%s).json",
+        "description": "Logs tool execution output to timestamped JSON files"
+      }
+    ]
+  },
+  "output": {
+    "directory": "tmp",
+    "format": "json",
+    "naming": "timestamp",
+    "retention": "keep-all"
+  },
+  "tracking": {
+    "enabled": true,
+    "metrics": [
+      "tool-name",
+      "execution-time",
+      "status",
+      "parameters",
+      "result"
+    ]
+  }
+}

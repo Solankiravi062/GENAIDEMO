@@ -43,7 +43,7 @@ export function CreateLinkModal({ onSuccess }: CreateLinkModalProps) {
       } else {
         setError(result.error || "Failed to create link");
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       setError("An error occurred while creating the link");
     } finally {
       setIsLoading(false);

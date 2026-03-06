@@ -38,7 +38,7 @@ export function DeleteLinkDialog({ linkId, shortCode, onSuccess }: DeleteLinkDia
       } else {
         setError(result.error || "Failed to delete link");
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       setError("An error occurred while deleting the link");
     } finally {
       setIsLoading(false);

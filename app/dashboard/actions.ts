@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import db from "@/db";
 import { shortenedLinks } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { createLinkSchema, type CreateLinkInput } from "@/lib/schemas";
+import { createLinkSchema } from "@/lib/schemas";
 import { createLinkInDb, findLinkByShortCode, updateLinkInDb, deleteLinkInDb } from "@/data/links";
 
 export type UserLink = {
@@ -114,7 +114,8 @@ export async function deleteLink(
     }
 
     return { success: true };
-  } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     return { success: false, error: "Failed to delete link" };
   }
 }

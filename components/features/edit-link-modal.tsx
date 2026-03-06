@@ -46,7 +46,7 @@ export function EditLinkModal({ link, onSuccess }: EditLinkModalProps) {
       } else {
         setError(result.error || "Failed to update link");
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       setError("An error occurred while updating the link");
     } finally {
       setIsLoading(false);

@@ -2,7 +2,7 @@
 
 import db from "@/db";
 import { shortenedLinks } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export type UserLink = {
   id: string;
@@ -60,7 +60,12 @@ export async function updateLinkInDb(
         shortCode: data.shortCode,
         updatedAt: new Date(),
       })
-      .where(eq(shortenedLinks.id, linkId))
+      .where(
+        and(
+          eq(shortenedLinks.id, linkId),
+          eq(shortenedLinks.userId, userId)
+        )
+      )
       .returning();
 
     return result[0] as UserLink;
@@ -72,11 +77,17 @@ export async function updateLinkInDb(
 
 export async function deleteLinkInDb(linkId: string, userId: string): Promise<boolean> {
   try {
-    await db
+    const deleted = await db
       .delete(shortenedLinks)
-      .where(eq(shortenedLinks.id, linkId));
+      .where(
+        and(
+          eq(shortenedLinks.id, linkId),
+          eq(shortenedLinks.userId, userId)
+        )
+      )
+      .returning();
 
-    return true;
+    return deleted.length > 0;
   } catch (error) {
     console.error("Error deleting link:", error);
     return false;
